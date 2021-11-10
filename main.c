@@ -57,6 +57,7 @@ int read_csv(){
   write(fd,data,sizeof(struct pop_entry)*5*rows);
   free(data);
   free(file_text);
+  printf("wrote %lu bytes to nyc_pop.data\n",sizeof(struct pop_entry)*5*rows);
   return 0;
 }
 
@@ -74,6 +75,22 @@ int read_data(){
     count++;
   }
 
+  return 0;
+}
+
+int add_data(){
+  printf("Enter year boro pop: ");
+  struct pop_entry entry;
+  char input[100];
+  char *p = input;
+  char boro[15];
+  fgets(input,100,stdin);
+  sscanf(p,"%d %s %d\n", &(entry.year), boro, &(entry.population));
+  strcpy(entry.boro,boro);
+
+  int fd = open("./nyc_pop.data",O_WRONLY | O_APPEND);
+  write(fd,&entry,sizeof(entry));
+  printf("Appended data to file: year: %d\t boro:%s\t pop%d\n",entry.year,entry.boro,entry.population);
   return 0;
 }
 
